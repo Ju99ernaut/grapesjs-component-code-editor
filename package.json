@@ -1,0 +1,32 @@
+{
+  "name": "grapesjs-component-code-editor",
+  "version": "1.0.1",
+  "description": "Grapesjs Component Code Editor",
+  "main": "dist/grapesjs-component-code-editor.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ju99ernaut/grapesjs-component-code-editor.git"
+  },
+  "scripts": {
+    "start": "grapesjs-cli serve",
+    "build": "grapesjs-cli build",
+    "build:css": "node-sass src/styles.scss dist/grapesjs-component-code-editor.min.css --output-style compressed",
+    "bump": "npm version patch -m 'Bump v%s'"
+  },
+  "keywords": [
+    "grapesjs",
+    "plugin",
+    "component",
+    "code-editor"
+  ],
+  "devDependencies": {
+    "grapesjs-cli": "^1.0.12",
+    "node-sass": "^4.14.1"
+  },
+  "author": "Brendon Ngirazi",
+  "license": "MIT",
+  "dependencies": {
+    "juice": "^7.0.0",
+    "split.js": "^1.6.2"
+  }
+}
