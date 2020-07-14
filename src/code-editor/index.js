@@ -124,7 +124,7 @@ class CodeEditor {
         this.editor.on('component:add', model => {
             this.editor.select(model);
             this.updateEditorContents();
-            if (!this.opts.openStyleOnSave) {
+            if (this.opts.openStyleOnSave) {
                 const sm = this.editor.Panels.getButton('views', 'open-sm');
                 sm && sm.set('active', 1);
             }
