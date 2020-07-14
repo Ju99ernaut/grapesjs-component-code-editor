@@ -8,8 +8,8 @@ A plugin that allows you to edit the code of a component that is selected on the
 ```html
 <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
 <script src="https://unpkg.com/grapesjs"></script>
-<link href="./dist/css/grapesjs-component-code-editor.min.css" rel="stylesheet">
-<script src="./dist/grapesjs-component-code-editor.min.js"></script>
+<link href="https://unpkg.com/grapesjs-component-code-editor/dist/grapesjs-component-code-editor.min.css" rel="stylesheet">
+<script src="https://unpkg.com/grapesjs-component-code-editor"></script>
 
 <div id="gjs"></div>
 ```
@@ -86,7 +86,7 @@ Directly in the browser
 ```html
 <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet"/>
 <script src="https://unpkg.com/grapesjs"></script>
-<link href="./dist/css/grapesjs-component-code-editor.min.css" rel="stylesheet">
+<link href="./dist/grapesjs-component-code-editor.min.css" rel="stylesheet">
 <script src="./dist/grapesjs-component-code-editor.min.js"></script>
 
 <div id="gjs"></div>
