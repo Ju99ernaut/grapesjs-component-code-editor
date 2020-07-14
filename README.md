@@ -1,6 +1,8 @@
 # Grapesjs Component Code Editor
 
-This plugin allows you to edit the code of a component that is selected on the canvas
+A plugin that allows you to edit the code of a component that is selected on the canvas
+
+![gif](https://media.giphy.com/media/mDGcQfZdQGHUAhlLD7/giphy.gif)
 
 ### HTML
 ```html
