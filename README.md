@@ -109,6 +109,7 @@ Modern javascript
 import grapesjs from 'grapesjs';
 import plugin from 'grapesjs-component-code-editor';
 import 'grapesjs/dist/css/grapes.min.css';
+import 'grapesjs-component-code-editor/dist/grapesjs-component-code-editor.min.css';
 
 const editor = grapesjs.init({
   container : '#gjs',
