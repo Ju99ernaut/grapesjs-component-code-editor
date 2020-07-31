@@ -1,6 +1,6 @@
 {
   "name": "grapesjs-component-code-editor",
-  "version": "1.0.3",
+  "version": "1.0.7",
   "description": "Grapesjs Component Code Editor",
   "main": "dist/grapesjs-component-code-editor.min.js",
   "repository": {
@@ -26,7 +26,6 @@
   "author": "Brendon Ngirazi",
   "license": "MIT",
   "dependencies": {
-    "juice": "^7.0.0",
     "split.js": "^1.6.2"
   }
 }

@@ -1,38 +1,14 @@
 //Original work Copyright (c) 2018, Duarte Henriques, https://github.com/portablemind/grapesjs-code-editor
 //Modified work Copyright (c) 2020, Brendon Ngirazi, 
 //All rights reserved.
-//
-//Redistribution and use in source and binary forms, with or without modification,
-//are permitted provided that the following conditions are met:
-//
-//- Redistributions of source code must retain the above copyright notice, this
-//  list of conditions and the following disclaimer.
-//- Redistributions in binary form must reproduce the above copyright notice, this
-//  list of conditions and the following disclaimer in the documentation and/or
-//  other materials provided with the distribution.
-//- Neither the name "GrapesJS" nor the names of its contributors may be
-//  used to endorse or promote products derived from this software without
-//  specific prior written permission.
-//THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-//ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-//WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-//DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-//ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-//(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-//LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-//ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-//(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-//SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import Split from 'split.js';
-import juice from 'juice';
 
-class CodeEditor {
+export class CodeEditor {
     constructor(editor, senderBtn, opts) {
         this.editor = editor;
         this.pfx = editor.getConfig('stylePrefix');
         this.opts = opts || {
-            inlineCss: false,
             editJs: false,
         };
         this.senderBtn = senderBtn;
@@ -92,11 +68,9 @@ class CodeEditor {
         const htmlTextArea = document.createElement('textarea');
         sections.push(this.buildSection('html', this.htmlCodeEditor, htmlTextArea));
 
-        if (!this.opts.inlineCss) {
-            this.cssCodeEditor = this.buildCodeEditor('css');
-            cssTextArea = document.createElement('textarea');
-            sections.push(this.buildSection('css', this.cssCodeEditor, cssTextArea));
-        }
+        this.cssCodeEditor = this.buildCodeEditor('css');
+        cssTextArea = document.createElement('textarea');
+        sections.push(this.buildSection('css', this.cssCodeEditor, cssTextArea));
 
         panel.set('appendContent', this.codePanel).trigger('change:appendContent');
         this.htmlCodeEditor.init(htmlTextArea);
@@ -107,19 +81,17 @@ class CodeEditor {
             .get(0)
             .addEventListener('click', this.updateHtml.bind(this));
 
-        if (!this.opts.inlineCss) {
-            this.findWithinEditor('.cp-apply-css')
-                .get(0)
-                .addEventListener('click', this.updateCss.bind(this));
+        this.findWithinEditor('.cp-apply-css')
+            .get(0)
+            .addEventListener('click', this.updateCss.bind(this));
 
-            Split(sections, {
-                direction: 'vertical',
-                sizes: [50, 50],
-                minSize: 100,
-                gutterSize: 1,
-                onDragEnd: this.refreshEditors.bind(this),
-            });
-        }
+        Split(sections, {
+            direction: 'vertical',
+            sizes: [50, 50],
+            minSize: 100,
+            gutterSize: 1,
+            onDragEnd: this.refreshEditors.bind(this),
+        });
 
         this.editor.on('component:add', model => {
             this.editor.select(model);
@@ -156,13 +128,11 @@ class CodeEditor {
 
     refreshEditors() {
         this.htmlCodeEditor.editor.refresh();
-        if (!this.opts.inlineCss) {
-            this.cssCodeEditor.editor.refresh();
-        }
+        this.cssCodeEditor.editor.refresh();
     }
 
     updateHtml() {
-        const htmlCode = this.htmlCodeEditor.editor.getValue();
+        let htmlCode = this.htmlCodeEditor.editor.getValue();
         if (!htmlCode || htmlCode === this.previousHtmlCode) return;
         this.previousHtmlCode = htmlCode;
 
@@ -174,21 +144,19 @@ class CodeEditor {
                 if (/^#/.test(rule))
                     idStyles += rule;
             });
-        const htmlInlineCss = juice(
-            `${htmlCode}<style>${idStyles}</style>`
-        );
+
+        htmlCode += `<style>${idStyles}</style>`;
+
         const component = this.editor.getSelected();
         const coll = component.collection;
         const at = coll.indexOf(component);
         coll.remove(component);
-        coll.add(htmlInlineCss, {
+        coll.add(htmlCode, {
             at
         });
 
-        //console.log(this.senderBtn);
         this.senderBtn.set('active', false);
         //console.log(this.senderBtn);
-
         //this.hideCodePanel();
     }
 
@@ -213,7 +181,6 @@ class CodeEditor {
 
         const component = this.editor.getSelected();
         if (component) {
-            //this.ccid = component.ccid;
             this.htmlCodeEditor.setContent(this.getComponentHtml(component));
             if (!this.opts.inlineCss) {
                 this.cssCodeEditor.setContent(this.editor.CodeManager.getCode(component, 'css', {
@@ -226,19 +193,8 @@ class CodeEditor {
     getComponentHtml(component) {
         let result = '';
 
-        if (this.opts.inlineCss) {
-            const html = component.toHTML();
-
-            const htmlInlineCss = juice(
-                `${html}<style>${this.editor.CodeManager.getCode(component, 'css', {
-                    cssc: this.editor.CssComposer
-                })}</style>`
-            );
-            result += htmlInlineCss;
-        } else {
-            const html = component.toHTML();
-            result += html;
-        }
+        const html = component.toHTML();
+        result += html;
 
         const js = this.opts.editJs ? component.get('script') : '';
         result += js ? `<script>${js}</script>` : '';
@@ -246,5 +202,3 @@ class CodeEditor {
         return result;
     }
 }
-
-export default CodeEditor;

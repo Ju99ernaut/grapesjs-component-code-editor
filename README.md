@@ -56,6 +56,8 @@ body, html {
 ## Summary
 
 * Plugin name: `grapesjs-component-code-editor`
+* Commands
+    * `open-code`
 
 
 
@@ -63,7 +65,6 @@ body, html {
 
 | Option | Description | Default |
 |-|-|-
-| `inlineCss` | Converts styles to inline styles and avoids the split editor | `false` |
 | `editJs` | Lets you edit component scripts `allowScripts` must be set to true | `false` |
 | `openStyleOnSave` | Open `stylesManager` when html changes are applied | `true` |
 
