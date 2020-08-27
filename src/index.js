@@ -10,7 +10,9 @@ export default (editor, opts = {}) => {
       //Allow editing of javascript, set allowScripts to true for this to work
       editJs: false,
       //Open stylesManager when html is saved
-      openStyleOnSave: true
+      openStyleOnClose: true,
+      //Remove component data eg data-gjs-type="..."
+      clearData: false
     },
     ...opts
   };

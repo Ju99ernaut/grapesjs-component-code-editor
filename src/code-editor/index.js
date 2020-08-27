@@ -8,6 +8,7 @@ export class CodeEditor {
     constructor(editor, senderBtn, opts) {
         this.editor = editor;
         this.pfx = editor.getConfig('stylePrefix');
+        this.sm = editor.Panels.getButton('views', 'open-sm');
         this.opts = opts || {
             editJs: false,
         };
@@ -96,10 +97,6 @@ export class CodeEditor {
         this.editor.on('component:add', model => {
             this.editor.select(model);
             this.updateEditorContents();
-            if (this.opts.openStyleOnSave) {
-                const sm = this.editor.Panels.getButton('views', 'open-sm');
-                sm && sm.set('active', 1);
-            }
         });
         this.editor.on('component:update', model => {
             this.updateEditorContents();
@@ -114,15 +111,16 @@ export class CodeEditor {
         this.codePanel.style.display = 'block';
         // make sure editor is aware of width change after the 300ms effect ends
         setTimeout(this.refreshEditors.bind(this), 320);
-        this.findWithinEditor('.gjs-pn-views-container').get(0).style.width =
+        this.findWithinEditor(`.${this.pfx}pn-views-container`).get(0).style.width =
             '35%';
-        this.findWithinEditor('.gjs-cv-canvas').get(0).style.width = '65%';
+        this.findWithinEditor(`.${this.pfx}cv-canvas`).get(0).style.width = '65%';
     }
 
     hideCodePanel() {
         if (this.codePanel) this.codePanel.style.display = 'none';
-        this.findWithinEditor('.gjs-pn-views-container').get(0).style.width = '15%';
-        this.findWithinEditor('.gjs-cv-canvas').get(0).style.width = '85%';
+        this.findWithinEditor(`.${this.pfx}pn-views-container`).get(0).style.width = '15%';
+        this.findWithinEditor(`.${this.pfx}cv-canvas`).get(0).style.width = '85%';
+        this.opts.openStyleOnClose && this.sm && this.sm.set('active', 1);
         this.isShowing = false;
     }
 
@@ -148,16 +146,9 @@ export class CodeEditor {
         htmlCode += `<style>${idStyles}</style>`;
 
         const component = this.editor.getSelected();
-        const coll = component.collection;
-        const at = coll.indexOf(component);
-        coll.remove(component);
-        coll.add(htmlCode, {
-            at
-        });
+        component.replaceWith(htmlCode);
 
-        this.senderBtn.set('active', false);
-        //console.log(this.senderBtn);
-        //this.hideCodePanel();
+        this.opts.openStyleOnClose && this.senderBtn.set('active', false) && this.hideCodePanel();
     }
 
     updateCss() {
@@ -193,7 +184,9 @@ export class CodeEditor {
     getComponentHtml(component) {
         let result = '';
 
-        const html = component.toHTML();
+        component.getEl().classList.remove(`${this.pfx}selected`)
+        const html = this.opts.clearData ? component.toHTML() : component.getEl().outerHTML;
+        component.getEl().classList.add(`${this.pfx}selected`);
         result += html;
 
         const js = this.opts.editJs ? component.get('script') : '';
