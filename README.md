@@ -2,7 +2,11 @@
 
 A plugin that allows you to edit the code of a component that is selected on the canvas
 
-![gif](https://media.giphy.com/media/mDGcQfZdQGHUAhlLD7/giphy.gif)
+>Recommended to use [grapesje-parser-postcss](https://github.com/artf/grapesjs-parser-postcss) with this plugin to avoid issues with `styles` as explained [here](https://grapesjs.com/docs/guides/Custom-CSS-parser.html#cssom-results-are-inconsistent)
+
+<p align="center">
+ <img src="https://media.giphy.com/media/mDGcQfZdQGHUAhlLD7/giphy.gif">
+</p>
 
 ### HTML
 ```html
@@ -66,7 +70,8 @@ body, html {
 | Option | Description | Default |
 |-|-|-
 | `editJs` | Lets you edit component scripts `allowScripts` must be set to true | `false` |
-| `openStyleOnSave` | Open `stylesManager` when html changes are applied | `true` |
+| `openStyleOnClose` | Open `stylesManager` when you close the `code-editor` | `true` |
+| `clearData` | Remove all `gjs-data` attributes from the component | `false` |
 
 
 
