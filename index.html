@@ -8,6 +8,7 @@
   <script src="https://unpkg.com/grapesjs"></script>
   <link href="dist/grapesjs-component-code-editor.min.css" rel="stylesheet">
   <script src="dist/grapesjs-component-code-editor.min.js"></script>
+  <script src="https://unpkg.com/grapesjs-parser-postcss"></script>
   <style>
     body,
     html {
@@ -95,7 +96,7 @@
       selectorManager: {
         componentFirst: true,
       },
-      plugins: ['grapesjs-component-code-editor'],
+      plugins: ['grapesjs-component-code-editor', 'grapesjs-parser-postcss'],
       pluginsOpts: {
         'grapesjs-component-code-editor': {
           /* Test here your options  */
