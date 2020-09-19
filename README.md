@@ -77,7 +77,7 @@ body, html {
 | `openStyleOnClose` | Open `stylesManager` when you close the `code-editor` | `true` |
 | `clearData` | Remove all `gjs-data` attributes from the component | `false` |
 
-
+>[grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) is better suited for editing scripts instead of using `editJs`, reason being `editJs` will inject scripts as separate components onto the canvas which often interferes with the main editor. [grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) avoids this by injecting scripts directly into a component therefore avoiding the use of `allowScripts`.
 
 ## Download
 
