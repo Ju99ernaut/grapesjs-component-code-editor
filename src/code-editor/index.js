@@ -155,16 +155,7 @@ export class CodeEditor {
         const cssCode = this.cssCodeEditor.editor.getValue();
         if (!cssCode || cssCode === this.previousCssCode) return;
         this.previousCssCode = cssCode;
-        this.editor.SelectorManager.add(this.editor.Parser.parseCss(cssCode));
-        //this.editor.setStyle(cssCode)
-        const cc = this.editor.CssComposer;
-        const selectorRules = cssCode.split(/(?<=}\n)/g);
-        for (let pair in selectorRules) {
-            let rulePair = selectorRules[pair].split(/(?={)/g);
-            //? selector eg. #id, rule eg. {color: 'red'}
-            if (!/^@/.test(rulePair[0]))
-                cc.setRule(rulePair[0], rulePair[1].replace("{", "")); //Somehow a "{" is being prepended
-        }
+        this.editor.Components.addComponent(`<style>${cssCode}</style>`);
     }
 
     updateEditorContents() {
