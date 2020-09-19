@@ -2,11 +2,15 @@
 
 A plugin that allows you to edit the code of a component that is selected on the canvas
 
->Recommended to use [grapesje-parser-postcss](https://github.com/artf/grapesjs-parser-postcss) with this plugin to avoid issues with `styles` as explained [here](https://grapesjs.com/docs/guides/Custom-CSS-parser.html#cssom-results-are-inconsistent)
-
 <p align="center">
  <img src="https://media.giphy.com/media/mDGcQfZdQGHUAhlLD7/giphy.gif">
 </p>
+
+>Recommended to use [grapesje-parser-postcss](https://github.com/artf/grapesjs-parser-postcss) with this plugin to avoid issues with `styles` as the default parser is inconsistent and will add a lot of extra rules to your css, more explained [here](https://grapesjs.com/docs/guides/Custom-CSS-parser.html#cssom-results-are-inconsistent)
+
+| Chrome Result | PostCSS Result |
+|--------|---------|
+|<p align="center"><img src="default.png"></p>|<p align="center"><img src="postcss.png"></p>|
 
 ### HTML
 ```html
