@@ -11,11 +11,11 @@ export default (editor, opts) => {
 
     cm.add(openCodeStr, {
         run: (editor, senderBtn) => {
-            if (!codeEditor) codeEditor = new CodeEditor(editor, senderBtn, opts);
+            !codeEditor && (codeEditor = new CodeEditor(editor, senderBtn, opts)) && codeEditor.buildCodePanel();
             codeEditor.showCodePanel();
         },
         stop: (editor, senderBtn) => {
-            if (codeEditor) codeEditor.hideCodePanel();
+            codeEditor && codeEditor.hideCodePanel();
         },
     });
 }
