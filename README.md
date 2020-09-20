@@ -6,6 +6,8 @@ A plugin that allows you to edit the code of a component that is selected on the
  <img src="https://media.giphy.com/media/mDGcQfZdQGHUAhlLD7/giphy.gif">
 </p>
 
+[DEMO](https://codepen.io/ju99ernaut/pen/RwaqwPQ)
+
 >Recommended to use [grapesje-parser-postcss](https://github.com/artf/grapesjs-parser-postcss) with this plugin to avoid issues with `styles` as the default parser is inconsistent and will add a lot of extra rules to your css, more explained [here](https://grapesjs.com/docs/guides/Custom-CSS-parser.html#cssom-results-are-inconsistent)
 
 | Chrome Result | PostCSS Result |
