@@ -5,16 +5,16 @@
 import Split from 'split.js';
 
 export class CodeEditor {
-    constructor(editor, senderBtn, opts) {
+    constructor(editor, opts) {
         this.editor = editor;
+        this.$ = editor.$;
         this.pfx = editor.getConfig('stylePrefix');
-        this.sm = editor.Panels.getButton('views', 'open-sm');
         this.opts = opts || {
             editJs: false,
         };
-        this.senderBtn = senderBtn;
+        this.canvas = this.findWithinEditor(`.${this.pfx}cv-canvas`);
+        this.panelViews = this.findWithinEditor(`.${this.pfx}pn-views-container`);
         this.isShowing = true;
-        this.buildCodePanel(editor);
     }
 
     findPanel() {
@@ -26,65 +26,71 @@ export class CodeEditor {
         return panel;
     }
 
-    findWithinEditor(arg) {
-        return this.editor.$(arg, this.editor.getEl());
+    findWithinEditor(selector) {
+        return this.$(selector, this.editor.getEl());
     }
 
     buildCodeEditor(type) {
-        let codeEditor = this.editor.CodeManager.getViewer('CodeMirror').clone();
-        codeEditor.set({
+        const {
+            editor,
+            opts
+        } = this;
+
+        return editor.CodeManager.createViewer({
             codeName: type === 'html' ? 'htmlmixed' : 'css',
-            readOnly: false,
             theme: 'hopscotch',
-            autoBeautify: true,
-            autoCloseTags: true,
-            autoCloseBrackets: true,
-            styleActiveLine: true,
-            smartIndent: true,
+            readOnly: 0,
+            autoBeautify: 1,
+            autoCloseTags: 1,
+            autoCloseBrackets: 1,
+            styleActiveLine: 1,
+            smartIndent: 1,
+            ...opts.codeViewOptions
         });
-        return codeEditor;
     }
 
-    buildSection(type, editor, textArea) {
-        const section = document.createElement('section');
-        section.innerHTML = `
+    buildSection(type, codeViewer) {
+        const {
+            $,
+            pfx
+        } = this;
+        const section = $('<section></section>');
+        section.append($(`
             <div class="codepanel-separator">
                 <div class="codepanel-label">${type}</div>
-                <button class="cp-apply-${type} ${this.pfx}btn-prim">Apply</button>
-            </div>`;
-        section.appendChild(textArea);
-        this.codePanel.appendChild(section);
-        return section;
+                <button class="cp-apply-${type} ${pfx}btn-prim">Apply</button>
+            </div>`));
+        const codeViewerEl = codeViewer.getElement();
+        codeViewerEl.style.height = 'calc(100% - 25px)';
+        section.append(codeViewerEl);
+        this.codePanel.append(section);
+        return section.get(0);
     }
 
-    buildCodePanel(editor) {
+    buildCodePanel() {
+        const {
+            $,
+            editor,
+        } = this;
         const panel = this.findPanel();
-        this.codePanel = document.createElement('div');
-        this.codePanel.classList.add('code-panel');
-
-        let sections = [];
-        let cssTextArea = null;
+        this.codePanel = $('<div></div>');
+        this.codePanel.get(0).classList.add('code-panel');
 
         this.htmlCodeEditor = this.buildCodeEditor('html');
-        const htmlTextArea = document.createElement('textarea');
-        sections.push(this.buildSection('html', this.htmlCodeEditor, htmlTextArea));
-
         this.cssCodeEditor = this.buildCodeEditor('css');
-        cssTextArea = document.createElement('textarea');
-        sections.push(this.buildSection('css', this.cssCodeEditor, cssTextArea));
+
+        const sections = [this.buildSection('html', this.htmlCodeEditor),
+            this.buildSection('css', this.cssCodeEditor)
+        ];
 
         panel.set('appendContent', this.codePanel).trigger('change:appendContent');
-        this.htmlCodeEditor.init(htmlTextArea);
-        if (!this.opts.inlineCss) this.cssCodeEditor.init(cssTextArea);
         this.updateEditorContents();
 
-        this.findWithinEditor('.cp-apply-html')
-            .get(0)
-            .addEventListener('click', this.updateHtml.bind(this));
+        this.codePanel.find('.cp-apply-html')
+            .on('click', this.updateHtml.bind(this));
 
-        this.findWithinEditor('.cp-apply-css')
-            .get(0)
-            .addEventListener('click', this.updateCss.bind(this));
+        this.codePanel.find('.cp-apply-css')
+            .on('click', this.updateCss.bind(this));
 
         Split(sections, {
             direction: 'vertical',
@@ -94,49 +100,45 @@ export class CodeEditor {
             onDragEnd: this.refreshEditors.bind(this),
         });
 
-        this.editor.on('component:add', model => {
-            this.editor.select(model);
+        editor.on('component:update', model => {
             this.updateEditorContents();
         });
-        this.editor.on('component:update', model => {
-            this.updateEditorContents();
-        });
-
-        return this.codePanel;
     }
 
     showCodePanel() {
         this.isShowing = true;
         this.updateEditorContents();
-        this.codePanel.style.display = 'block';
+        this.codePanel.get(0).style.display = 'block';
         // make sure editor is aware of width change after the 300ms effect ends
         setTimeout(this.refreshEditors.bind(this), 320);
-        this.findWithinEditor(`.${this.pfx}pn-views-container`).get(0).style.width =
-            '35%';
-        this.findWithinEditor(`.${this.pfx}cv-canvas`).get(0).style.width = '65%';
+        this.panelViews.get(0).style.width = '35%';
+        this.canvas.get(0).style.width = '65%';
     }
 
     hideCodePanel() {
-        if (this.codePanel) this.codePanel.style.display = 'none';
-        this.findWithinEditor(`.${this.pfx}pn-views-container`).get(0).style.width = '15%';
-        this.findWithinEditor(`.${this.pfx}cv-canvas`).get(0).style.width = '85%';
-        this.opts.openStyleOnClose && this.sm && this.sm.set('active', 1);
+        if (this.codePanel) this.codePanel.get(0).style.display = 'none';
+        this.panelViews.get(0).style.width = '15%';
+        this.canvas.get(0).style.width = '85%';
         this.isShowing = false;
     }
 
     refreshEditors() {
-        this.htmlCodeEditor.editor.refresh();
-        this.cssCodeEditor.editor.refresh();
+        this.htmlCodeEditor.refresh();
+        this.cssCodeEditor.refresh();
     }
 
     updateHtml() {
-        let htmlCode = this.htmlCodeEditor.editor.getValue();
+        const {
+            editor,
+            component
+        } = this
+        let htmlCode = this.htmlCodeEditor.getContent();
         if (!htmlCode || htmlCode === this.previousHtmlCode) return;
         this.previousHtmlCode = htmlCode;
 
         let idStyles = '';
-        this.cssCodeEditor.editor
-            .getValue()
+        this.cssCodeEditor
+            .getContent()
             .split(/(?<=}\n)/g)
             .forEach(rule => {
                 if (/^#/.test(rule))
@@ -145,14 +147,11 @@ export class CodeEditor {
 
         htmlCode += `<style>${idStyles}</style>`;
 
-        const component = this.editor.getSelected();
-        component.replaceWith(htmlCode);
-
-        this.opts.openStyleOnClose && this.senderBtn.set('active', false) && this.hideCodePanel();
+        editor.select(component.replaceWith(htmlCode));
     }
 
     updateCss() {
-        const cssCode = this.cssCodeEditor.editor.getValue();
+        const cssCode = this.cssCodeEditor.getContent();
         if (!cssCode || cssCode === this.previousCssCode) return;
         this.previousCssCode = cssCode;
         this.editor.Components.addComponent(`<style>${cssCode}</style>`);
@@ -161,26 +160,30 @@ export class CodeEditor {
     updateEditorContents() {
         if (!this.isShowing) return;
 
-        const component = this.editor.getSelected();
-        if (component) {
-            this.htmlCodeEditor.setContent(this.getComponentHtml(component));
-            if (!this.opts.inlineCss) {
-                this.cssCodeEditor.setContent(this.editor.CodeManager.getCode(component, 'css', {
-                    cssc: this.editor.CssComposer
-                }));
-            }
+        this.component = this.editor.getSelected();
+        if (this.component) {
+            this.htmlCodeEditor.setContent(this.getComponentHtml(this.component));
+            this.cssCodeEditor.setContent(this.editor.CodeManager.getCode(this.component, 'css', {
+                cssc: this.editor.CssComposer
+            }));
         }
     }
 
     getComponentHtml(component) {
+        const {
+            pfx,
+            opts
+        } = this;
         let result = '';
+        const componentEl = component.getEl();
 
-        component.getEl().classList.remove(`${this.pfx}selected`)
-        const html = this.opts.clearData ? component.toHTML() : component.getEl().outerHTML;
-        component.getEl().classList.add(`${this.pfx}selected`);
+        !opts.clearData && componentEl.classList.remove(`${pfx}selected`);
+        const html = opts.clearData ? component.toHTML() :
+            (componentEl.id === 'wrapper' ? componentEl.innerHTML : componentEl.outerHTML);
+        !opts.clearData && componentEl.classList.add(`${pfx}selected`);
         result += html;
 
-        const js = this.opts.editJs ? component.get('script') : '';
+        const js = opts.editJs ? component.getScriptString() : '';
         result += js ? `<script>${js}</script>` : '';
 
         return result;
