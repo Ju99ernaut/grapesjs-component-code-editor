@@ -73,9 +73,9 @@ body, html {
 
 | Option | Description | Default |
 |-|-|-
-| `editJs` | Lets you edit component scripts `allowScripts` must be set to true | `false` |
-| `openStyleOnClose` | Open `stylesManager` when you close the `code-editor` | `true` |
 | `clearData` | Remove all `gjs-data` attributes from the component | `false` |
+| `codeViewOptions` | Code view/editor options | `{}` |
+| `editJs` | Lets you edit component scripts `allowScripts` must be set to true | `false` |
 
 >[grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) is better suited for editing scripts instead of using `editJs`, reason being `editJs` will inject scripts as separate components onto the canvas which often interferes with the main editor. [grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) avoids this by injecting scripts directly into a component therefore avoiding the use of `allowScripts`.
 
@@ -147,6 +147,7 @@ panelViews.get('buttons').add([{
   },
   className: 'fa fa-file-code-o',
   command: 'open-code',
+  togglable: false, //do not close when button is clicked again
   id: 'open-code'
 }]);
 ```
