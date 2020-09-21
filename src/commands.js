@@ -11,7 +11,7 @@ export default (editor, opts) => {
 
     cm.add(openCodeStr, {
         run: (editor, senderBtn) => {
-            !codeEditor && (codeEditor = new CodeEditor(editor, senderBtn, opts)) && codeEditor.buildCodePanel();
+            !codeEditor && (codeEditor = new CodeEditor(editor, opts)) && codeEditor.buildCodePanel();
             codeEditor.showCodePanel();
         },
         stop: (editor, senderBtn) => {
