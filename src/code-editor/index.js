@@ -132,7 +132,7 @@ export class CodeEditor {
             editor,
             component
         } = this
-        let htmlCode = this.htmlCodeEditor.getContent();
+        let htmlCode = this.htmlCodeEditor.getContent().trim();
         if (!htmlCode || htmlCode === this.previousHtmlCode) return;
         this.previousHtmlCode = htmlCode;
 
@@ -151,7 +151,7 @@ export class CodeEditor {
     }
 
     updateCss() {
-        const cssCode = this.cssCodeEditor.getContent();
+        const cssCode = this.cssCodeEditor.getContent().trim();
         if (!cssCode || cssCode === this.previousCssCode) return;
         this.previousCssCode = cssCode;
         this.editor.Components.addComponent(`<style>${cssCode}</style>`);
