@@ -52,16 +52,23 @@ export class CodeEditor {
     buildSection(type, codeViewer) {
         const {
             $,
-            pfx
+            pfx,
+            opts
         } = this;
         const section = $('<section></section>');
+        const btnText = type === 'html' ? opts.htmlBtnText : opts.cssBtnText;
+        const cleanCssBtn = (opts.cleanCssBtn && type === 'css') ?
+            `<button class="cp-delete-${type} ${pfx}btn-prim">${opts.cleanCssBtnText}</button>` : '';
         section.append($(`
             <div class="codepanel-separator">
                 <div class="codepanel-label">${type}</div>
-                <button class="cp-apply-${type} ${pfx}btn-prim">Apply</button>
+                <div class="cp-btn-container">
+                    ${cleanCssBtn}
+                    <button class="cp-apply-${type} ${pfx}btn-prim">${btnText}</button>
+                </div>
             </div>`));
         const codeViewerEl = codeViewer.getElement();
-        codeViewerEl.style.height = 'calc(100% - 25px)';
+        codeViewerEl.style.height = 'calc(100% - 30px)';
         section.append(codeViewerEl);
         this.codePanel.append(section);
         return section.get(0);
@@ -91,6 +98,9 @@ export class CodeEditor {
 
         this.codePanel.find('.cp-apply-css')
             .on('click', this.updateCss.bind(this));
+
+        this.opts.cleanCssBtn && this.codePanel.find('.cp-delete-css')
+            .on('click', this.deleteSelectedCss.bind(this));
 
         Split(sections, {
             direction: 'vertical',
@@ -153,12 +163,26 @@ export class CodeEditor {
     updateCss() {
         const cssCode = this.cssCodeEditor.getContent().trim();
         if (!cssCode || cssCode === this.previousCssCode) return;
+        this.parseRemove(cssCode);
+        this.previousCssCode = cssCode;
+        this.editor.Components.addComponent(`<style>${cssCode}</style>`);
+    }
+
+    deleteSelectedCss() {
+        const selections = this.cssCodeEditor.editor.getSelections();
+        selections.forEach(selection => {
+            this.parseRemove(selection)
+        });
+        this.cssCodeEditor.editor.deleteH()
+    }
+
+    parseRemove(removeCss) {
         const {
-            editor
+            editor,
         } = this;
         const cssc = editor.CssComposer
         const allRules = cssc.getAll();
-        editor.Parser.parseCss(cssCode).forEach(p => {
+        editor.Parser.parseCss(removeCss).forEach(p => {
             const config = {
                 singleAtRule: p.singleAtRule,
                 atRuleType: p.atRuleType,
@@ -174,8 +198,6 @@ export class CodeEditor {
                     this.removeSelector(selector, allRules, cssc, config);
                 });
         });
-        this.previousCssCode = cssCode;
-        editor.Components.addComponent(`<style>${cssCode}</style>`);
     }
 
     removeSelector(rule, allRules, cssc, opts = {}) {
@@ -191,7 +213,7 @@ export class CodeEditor {
             else if (atRuleType && singleAtRule)
                 return r => r.get('atRuleType') == atRuleType && r.get('singleAtRule') == singleAtRule;
             else if (state)
-                return r == cssc.getRule(rule) && r.get('state') == state;
+                return r == cssc.getRule(`${rule}:${state}`);
             return r == cssc.getRule(rule);
         });
         allRules.remove(toRemove);
