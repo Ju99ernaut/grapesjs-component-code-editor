@@ -8,7 +8,15 @@ export default (editor, opts = {}) => {
       //Remove component data eg data-gjs-type="..."
       clearData: false,
       //Code viewer options
-      codeViewOptions: {}
+      codeViewOptions: {},
+      //Used to remove css from the Selector Manager
+      cleanCssBtn: true,
+      //Save HTML button text
+      htmlBtnText: 'Apply',
+      //Save CSS button text
+      cssBtnText: 'Apply',
+      //Clean CSS button text
+      cleanCssBtnText: 'Delete'
     },
     ...opts
   };
