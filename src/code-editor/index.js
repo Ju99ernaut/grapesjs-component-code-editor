@@ -159,22 +159,39 @@ export class CodeEditor {
         const cssc = editor.CssComposer
         const allRules = cssc.getAll();
         editor.Parser.parseCss(cssCode).forEach(p => {
-            console.log(p)
+            const config = {
+                singleAtRule: p.singleAtRule,
+                atRuleType: p.atRuleType,
+                mediaText: p.mediaText,
+                state: p.state
+            };
             p.selectors.length &&
                 p.selectors.forEach(selector => {
-                    this.removeSelector(selector, allRules, cssc);
+                    this.removeSelector(selector, allRules, cssc, config);
                 });
             p.selectorsAdd &&
                 p.selectorsAdd.split(', ').forEach(selector => {
-                    this.removeSelector(selector, allRules, cssc)
+                    this.removeSelector(selector, allRules, cssc, config);
                 });
         });
         this.previousCssCode = cssCode;
         editor.Components.addComponent(`<style>${cssCode}</style>`);
     }
 
-    removeSelector(rule, allRules, cssc) {
+    removeSelector(rule, allRules, cssc, opts = {}) {
+        const {
+            singleAtRule,
+            atRuleType,
+            mediaText,
+            state
+        } = opts;
         const toRemove = allRules.filter(r => {
+            if (atRuleType && mediaText)
+                return r => r.get('atRuleType') == atRuleType && r.get('mediaText') == mediaText;
+            else if (atRuleType && singleAtRule)
+                return r => r.get('atRuleType') == atRuleType && r.get('singleAtRule') == singleAtRule;
+            else if (state)
+                return r == cssc.getRule(rule) && r.get('state') == state;
             return r == cssc.getRule(rule);
         });
         allRules.remove(toRemove);
