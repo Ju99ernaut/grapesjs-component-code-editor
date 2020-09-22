@@ -8,7 +8,7 @@ A plugin that allows you to edit the code of a component that is selected on the
 
 [DEMO](https://codepen.io/ju99ernaut/pen/RwaqwPQ)
 
->Recommended to use [grapesje-parser-postcss](https://github.com/artf/grapesjs-parser-postcss) with this plugin to avoid issues with `styles` as the default parser is inconsistent and will add a lot of extra rules to your css, more explained [here](https://grapesjs.com/docs/guides/Custom-CSS-parser.html#cssom-results-are-inconsistent)
+>Recommended-use [grapesje-parser-postcss](https://github.com/artf/grapesjs-parser-postcss) with this plugin to avoid issues with `styles` as the default parser is inconsistent and will add a lot of extra rules to your css, more explained [here](https://grapesjs.com/docs/guides/Custom-CSS-parser.html#cssom-results-are-inconsistent)
 
 | Chrome Result | PostCSS Result |
 |--------|---------|
@@ -78,8 +78,14 @@ body, html {
 | `clearData` | Remove all `gjs-data` attributes from the component | `false` |
 | `codeViewOptions` | Code view/editor options | `{}` |
 | `editJs` | Lets you edit component scripts `allowScripts` must be set to true | `false` |
+| `cleanCssBtn` | /Used to remove css from the Selector Manager | `true` |
+| `htmlBtnText` | Save HTML button text | `Apply` |
+| `cssBtnText` | Save CSS button text | `Apply` |
+| `cleanCssBtnText` | Clean HTML button text | `Delete` |
 
->[grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) is better suited for editing scripts instead of using `editJs`, reason being `editJs` will inject scripts as separate components onto the canvas which often interferes with the main editor. [grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) avoids this by injecting scripts directly into a component therefore avoiding the use of `allowScripts`.
+>Tip-[grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) is better suited for editing scripts instead of using `editJs`, reason being `editJs` will inject scripts as separate components onto the canvas which often interferes with the main editor. [grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) avoids this by injecting scripts directly into a component therefore avoiding the use of `allowScripts`.
+
+>`cleanCssBtn`-When you delete a selector in the `code-editor` it is still in the `Selector Manager` therefore it will still affect the component after saving, this button removes the selector from both the `code-editor` and `Selector Manager`. Only valid css rules can be removed eg `.class{ color: blue }`
 
 ## Download
 
