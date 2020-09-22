@@ -153,8 +153,31 @@ export class CodeEditor {
     updateCss() {
         const cssCode = this.cssCodeEditor.getContent().trim();
         if (!cssCode || cssCode === this.previousCssCode) return;
+        const {
+            editor
+        } = this;
+        const cssc = editor.CssComposer
+        const allRules = cssc.getAll();
+        editor.Parser.parseCss(cssCode).forEach(p => {
+            console.log(p)
+            p.selectors.length &&
+                p.selectors.forEach(selector => {
+                    this.removeSelector(selector, allRules, cssc);
+                });
+            p.selectorsAdd &&
+                p.selectorsAdd.split(', ').forEach(selector => {
+                    this.removeSelector(selector, allRules, cssc)
+                });
+        });
         this.previousCssCode = cssCode;
-        this.editor.Components.addComponent(`<style>${cssCode}</style>`);
+        editor.Components.addComponent(`<style>${cssCode}</style>`);
+    }
+
+    removeSelector(rule, allRules, cssc) {
+        const toRemove = allRules.filter(r => {
+            return r == cssc.getRule(rule);
+        });
+        allRules.remove(toRemove);
     }
 
     updateEditorContents() {
