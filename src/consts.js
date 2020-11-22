@@ -1,1 +1,3 @@
-export const openCodeStr = 'open-code';
+export const
+    openCodeStr = 'open-code',
+    getConstuctor = 'code-editor-constructor';
