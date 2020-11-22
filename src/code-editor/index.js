@@ -9,9 +9,7 @@ export class CodeEditor {
         this.editor = editor;
         this.$ = editor.$;
         this.pfx = editor.getConfig('stylePrefix');
-        this.opts = opts || {
-            editJs: false,
-        };
+        this.opts = opts;
         this.canvas = this.findWithinEditor(`.${this.pfx}cv-canvas`);
         this.panelViews = this.findWithinEditor(`.${this.pfx}pn-views-container`);
         this.isShowing = true;
@@ -19,10 +17,8 @@ export class CodeEditor {
 
     findPanel() {
         const pn = this.editor.Panels;
-        const id = 'views-container';
-        const panel = pn.getPanel(id) || pn.addPanel({
-            id
-        });
+        const id = this.opts.panelId;
+        const panel = pn.getPanel(id) || pn.addPanel({ id });
         return panel;
     }
 
@@ -31,10 +27,7 @@ export class CodeEditor {
     }
 
     buildCodeEditor(type) {
-        const {
-            editor,
-            opts
-        } = this;
+        const { editor, opts } = this;
 
         return editor.CodeManager.createViewer({
             codeName: type === 'html' ? 'htmlmixed' : 'css',
@@ -50,11 +43,7 @@ export class CodeEditor {
     }
 
     buildSection(type, codeViewer) {
-        const {
-            $,
-            pfx,
-            opts
-        } = this;
+        const { $, pfx, opts } = this;
         const section = $('<section></section>');
         const btnText = type === 'html' ? opts.htmlBtnText : opts.cssBtnText;
         const cleanCssBtn = (opts.cleanCssBtn && type === 'css') ?
@@ -75,13 +64,10 @@ export class CodeEditor {
     }
 
     buildCodePanel() {
-        const {
-            $,
-            editor,
-        } = this;
-        const panel = this.findPanel();
+        const { $, editor } = this;
+        const panel = this.opts.panelId ? this.findPanel() : 0;
         this.codePanel = $('<div></div>');
-        this.codePanel.get(0).classList.add('code-panel');
+        this.codePanel.addClass('code-panel');
 
         this.htmlCodeEditor = this.buildCodeEditor('html');
         this.cssCodeEditor = this.buildCodeEditor('css');
@@ -90,7 +76,9 @@ export class CodeEditor {
             this.buildSection('css', this.cssCodeEditor)
         ];
 
-        panel.set('appendContent', this.codePanel).trigger('change:appendContent');
+        panel && !this.opts.appendTo &&
+            panel.set('appendContent', this.codePanel).trigger('change:appendContent');
+        this.opts.appendTo && $(this.opts.appendTo).append(this.codePanel);
         this.updateEditorContents();
 
         this.codePanel.find('.cp-apply-html')
@@ -110,25 +98,23 @@ export class CodeEditor {
             onDragEnd: this.refreshEditors.bind(this),
         });
 
-        editor.on('component:update', model => {
-            this.updateEditorContents();
-        });
+        editor.on('component:update', model => this.updateEditorContents());
     }
 
     showCodePanel() {
         this.isShowing = true;
         this.updateEditorContents();
-        this.codePanel.get(0).style.display = 'block';
+        this.codePanel.css('display', 'block');
         // make sure editor is aware of width change after the 300ms effect ends
         setTimeout(this.refreshEditors.bind(this), 320);
-        this.panelViews.get(0).style.width = '35%';
-        this.canvas.get(0).style.width = '65%';
+        this.panelViews.css('width', this.opts.openState.pn);
+        this.canvas.css('width', this.opts.openState.cv);
     }
 
     hideCodePanel() {
-        if (this.codePanel) this.codePanel.get(0).style.display = 'none';
-        this.panelViews.get(0).style.width = '15%';
-        this.canvas.get(0).style.width = '85%';
+        if (this.codePanel) this.codePanel.css('display', 'none');
+        this.panelViews.css('width', this.opts.closedState.pn);
+        this.canvas.css('width', this.opts.closedState.pn);
         this.isShowing = false;
     }
 
@@ -138,10 +124,7 @@ export class CodeEditor {
     }
 
     updateHtml() {
-        const {
-            editor,
-            component
-        } = this
+        const { editor, component } = this;
         let htmlCode = this.htmlCodeEditor.getContent().trim();
         if (!htmlCode || htmlCode === this.previousHtmlCode) return;
         this.previousHtmlCode = htmlCode;
@@ -170,16 +153,12 @@ export class CodeEditor {
 
     deleteSelectedCss() {
         const selections = this.cssCodeEditor.editor.getSelections();
-        selections.forEach(selection => {
-            this.parseRemove(selection)
-        });
-        this.cssCodeEditor.editor.deleteH()
+        selections.forEach(selection => this.parseRemove(selection));
+        this.cssCodeEditor.editor.deleteH();
     }
 
     parseRemove(removeCss) {
-        const {
-            editor,
-        } = this;
+        const { editor } = this;
         const cssc = editor.CssComposer
         const allRules = cssc.getAll();
         editor.Parser.parseCss(removeCss).forEach(p => {
@@ -201,12 +180,7 @@ export class CodeEditor {
     }
 
     removeSelector(rule, allRules, cssc, opts = {}) {
-        const {
-            singleAtRule,
-            atRuleType,
-            mediaText,
-            state
-        } = opts;
+        const { singleAtRule, atRuleType, mediaText, state } = opts;
         const toRemove = allRules.filter(r => {
             if (atRuleType && mediaText)
                 return r => r.get('atRuleType') == atRuleType && r.get('mediaText') == mediaText;
@@ -232,10 +206,7 @@ export class CodeEditor {
     }
 
     getComponentHtml(component) {
-        const {
-            pfx,
-            opts
-        } = this;
+        const { pfx, opts } = this;
         let result = '';
         const componentEl = component.getEl();
 
