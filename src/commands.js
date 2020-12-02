@@ -1,5 +1,5 @@
 import { CodeEditor } from './code-editor';
-import { openCodeStr, getConstuctor } from './consts';
+import { openCodeStr, getObject, getConstuctor } from './consts';
 
 export default (editor, opts) => {
     const cm = editor.Commands;
@@ -15,7 +15,11 @@ export default (editor, opts) => {
         },
     });
 
+    cm.add(getObject, (editor, sender, options = {}) => {
+        return new CodeEditor(editor, { ...options, ...opts });
+    });
+
     cm.add(getConstuctor, () => {
         return CodeEditor;
-    })
+    });
 }
