@@ -1,6 +1,6 @@
 {
   "name": "grapesjs-component-code-editor",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Grapesjs Component Code Editor",
   "main": "dist/grapesjs-component-code-editor.min.js",
   "repository": {
