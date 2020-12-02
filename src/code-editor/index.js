@@ -11,7 +11,8 @@ export class CodeEditor {
         this.pfx = editor.getConfig('stylePrefix');
         this.opts = opts;
         this.canvas = this.findWithinEditor(`.${this.pfx}cv-canvas`);
-        this.panelViews = this.findWithinEditor(`.${this.pfx}pn-views-container`);
+        this.panelViews = opts.appendTo ? this.$(opts.appendTo) :
+            this.findWithinEditor(`.${this.pfx}pn-${opts.panelId}`);
         this.isShowing = true;
     }
 
