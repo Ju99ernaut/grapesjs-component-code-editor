@@ -115,7 +115,7 @@ export class CodeEditor {
     hideCodePanel() {
         if (this.codePanel) this.codePanel.css('display', 'none');
         this.panelViews.css('width', this.opts.closedState.pn);
-        this.canvas.css('width', this.opts.closedState.pn);
+        this.canvas.css('width', this.opts.closedState.cv);
         this.isShowing = false;
     }
 
