@@ -67,14 +67,19 @@ body, html {
 
 * Plugin name: `grapesjs-component-code-editor`
 * Commands
-    * `open-code`
-
+    * `open-code` - opens code editor in right panel
+    * `code-editor-object` - get new instance `CodeEditor` object
+    * `code-editor-constructor` - get `CodeEditor` constructor
 
 
 ## Options
 
 | Option | Description | Default |
 |-|-|-
+| `panelId` | Id of panel to append code editor | `views-container` |
+| `appendTo` | Append code editor to an element not `views-container` | ` ` |
+| `openState` | Determine width of views panel and canvas in the open state | `{...}` |
+| `openState` | Determine width of views panel and canvas in the open state | `{...}` |
 | `clearData` | Remove all `gjs-data` attributes from the component | `false` |
 | `codeViewOptions` | Code view/editor options | `{}` |
 | `editJs` | Lets you edit component scripts `allowScripts` must be set to true | `false` |
