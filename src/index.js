@@ -17,12 +17,14 @@ export default (editor, opts = {}) => {
                 cv: '85%',
                 pn: '15%'
             },
+            //Code viewer options
+            codeViewOptions: {},
+            //Stop resizing openState and closedState
+            preserveWidth: false,
             //Allow editing of javascript, set allowScripts to true for this to work
             editJs: false,
             //Remove component data eg data-gjs-type="..."
             clearData: false,
-            //Code viewer options
-            codeViewOptions: {},
             //Used to remove css from the Selector Manager
             cleanCssBtn: true,
             //Save HTML button text

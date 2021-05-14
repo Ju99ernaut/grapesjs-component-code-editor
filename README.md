@@ -74,19 +74,20 @@ body, html {
 
 ## Options
 
-| Option | Description | Default |
-|-|-|-
-| `panelId` | Id of panel to append code editor | `views-container` |
-| `appendTo` | Append code editor to an element not `views-container` | ` ` |
-| `openState` | Determine width of views panel and canvas in the open state | `{...}` |
-| `closedtate` | Determine width of views panel and canvas in the closed state | `{...}` |
-| `clearData` | Remove all `gjs-data` attributes from the component | `false` |
-| `codeViewOptions` | Code view/editor options | `{}` |
-| `editJs` | Lets you edit component scripts `allowScripts` must be set to true | `false` |
-| `cleanCssBtn` | /Used to remove css from the Selector Manager | `true` |
-| `htmlBtnText` | Save HTML button text | `Apply` |
-| `cssBtnText` | Save CSS button text | `Apply` |
-| `cleanCssBtnText` | Clean HTML button text | `Delete` |
+| Option name | Default value | Description |
+| ----------- | ------------- | ----------- |
+| `panelId` | `views-container` | Id of panel to append code editor. |
+| `appendTo` | `.gjs-pn-views-container` | Append code editor to an element not `views-container` (class or id). |
+| `openState` | `{ pn: '35%', cv: '65%' }` | Determine width of views panel (`pn`) and canvas (`cv`) in the open state. |
+| `closedtate` | `{ pn: '15%', cv: '85%' }` | Determine width of views panel (`pn`) and canvas (`cv`) in the closed state. |
+| `codeViewOptions` | `{}` | Code view/editor options. ([more info](https://github.com/artf/grapesjs/issues/324)) |
+| `preserveWidth` | `false` | Stop resizing `openState` and `closedState`. Preserve views panel and canvas sizes. |
+| `clearData` | `false` | Remove all `gjs-data` attributes from the component. |
+| `editJs` | `false` | Lets you edit component scripts `allowScripts` must be set to true. |
+| `cleanCssBtn` | `true` | Used to remove css from the Selector Manager. |
+| `htmlBtnText` | `Apply` | Save HTML button text. |
+| `cssBtnText` | `Apply` | Save CSS button text. |
+| `cleanCssBtnText` | `Delete` | Clean HTML button text. |
 
 >Tip-[grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) is better suited for editing scripts instead of using `editJs`, reason being `editJs` will inject scripts as separate components onto the canvas which often interferes with the main editor. [grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) avoids this by injecting scripts directly into a component therefore avoiding the use of `allowScripts`.
 
