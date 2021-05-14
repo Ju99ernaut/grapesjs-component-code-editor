@@ -1,5 +1,5 @@
 //Original work Copyright (c) 2018, Duarte Henriques, https://github.com/portablemind/grapesjs-code-editor
-//Modified work Copyright (c) 2020, Brendon Ngirazi, 
+//Modified work Copyright (c) 2020, Brendon Ngirazi,
 //All rights reserved.
 
 import Split from 'split.js';
@@ -108,15 +108,25 @@ export class CodeEditor {
         this.codePanel.css('display', 'block');
         // make sure editor is aware of width change after the 300ms effect ends
         setTimeout(this.refreshEditors.bind(this), 320);
+
+        if (this.opts.preserveWidth) {
+          return
+        }
+
         this.panelViews.css('width', this.opts.openState.pn);
         this.canvas.css('width', this.opts.openState.cv);
     }
 
     hideCodePanel() {
         if (this.codePanel) this.codePanel.css('display', 'none');
+        this.isShowing = false;
+
+        if (this.opts.preserveWidth) {
+          return
+        }
+
         this.panelViews.css('width', this.opts.closedState.pn);
         this.canvas.css('width', this.opts.closedState.cv);
-        this.isShowing = false;
     }
 
     refreshEditors() {

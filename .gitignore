@@ -1,6 +1,11 @@
-.DS_Store
-private/
-/locale
+# Folders
 node_modules/
+private/
+.idea/
+
+# Files
 *.log
+.DS_Store
 _index.html
+
+/locale
