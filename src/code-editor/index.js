@@ -73,9 +73,7 @@ export class CodeEditor {
         this.htmlCodeEditor = this.buildCodeEditor('html');
         this.cssCodeEditor = this.buildCodeEditor('css');
 
-        const sections = [this.buildSection('html', this.htmlCodeEditor),
-            this.buildSection('css', this.cssCodeEditor)
-        ];
+        const sections = [this.buildSection('html', this.htmlCodeEditor), this.buildSection('css', this.cssCodeEditor)];
 
         panel && !this.opts.appendTo &&
             panel.set('appendContent', this.codePanel).trigger('change:appendContent');
@@ -109,9 +107,7 @@ export class CodeEditor {
         // make sure editor is aware of width change after the 300ms effect ends
         setTimeout(this.refreshEditors.bind(this), 320);
 
-        if (this.opts.preserveWidth) {
-          return
-        }
+        if (this.opts.preserveWidth) return;
 
         this.panelViews.css('width', this.opts.openState.pn);
         this.canvas.css('width', this.opts.openState.cv);
@@ -121,9 +117,7 @@ export class CodeEditor {
         if (this.codePanel) this.codePanel.css('display', 'none');
         this.isShowing = false;
 
-        if (this.opts.preserveWidth) {
-          return
-        }
+        if (this.opts.preserveWidth) return;
 
         this.panelViews.css('width', this.opts.closedState.pn);
         this.canvas.css('width', this.opts.closedState.cv);
