@@ -145,7 +145,11 @@ export class CodeEditor {
 
         htmlCode += `<style>${idStyles}</style>`;
 
-        editor.select(component.replaceWith(htmlCode));
+        if (component.attributes.type === 'wrapper') {
+            editor.setComponents(htmlCode);
+        } else {
+            editor.select(component.replaceWith(htmlCode));
+        }
     }
 
     updateCss() {
@@ -153,7 +157,7 @@ export class CodeEditor {
         if (!cssCode || cssCode === this.previousCssCode) return;
         this.parseRemove(cssCode);
         this.previousCssCode = cssCode;
-        this.editor.Components.addComponent(`<style>${cssCode}</style>`);
+        this.editor.addStyle(cssCode);
     }
 
     deleteSelectedCss() {
@@ -217,7 +221,7 @@ export class CodeEditor {
 
         !opts.clearData && componentEl.classList.remove(`${pfx}selected`);
         const html = opts.clearData ? component.toHTML() :
-            (componentEl.id === 'wrapper' ? componentEl.innerHTML : componentEl.outerHTML);
+            (component.attributes.type === 'wrapper' ? componentEl.innerHTML : componentEl.outerHTML);
         !opts.clearData && componentEl.classList.add(`${pfx}selected`);
         result += html;
 
