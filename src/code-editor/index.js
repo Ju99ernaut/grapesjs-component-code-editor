@@ -128,7 +128,8 @@ export class CodeEditor {
         this.cssCodeEditor.refresh();
     }
 
-    updateHtml() {
+    updateHtml(e) {
+        e?.preventDefault();
         const { editor, component } = this;
         let htmlCode = this.htmlCodeEditor.getContent().trim();
         if (!htmlCode || htmlCode === this.previousHtmlCode) return;
@@ -152,7 +153,8 @@ export class CodeEditor {
         }
     }
 
-    updateCss() {
+    updateCss(e) {
+        e?.preventDefault();
         const cssCode = this.cssCodeEditor.getContent().trim();
         if (!cssCode || cssCode === this.previousCssCode) return;
         this.parseRemove(cssCode);
@@ -160,7 +162,8 @@ export class CodeEditor {
         this.editor.addStyle(cssCode);
     }
 
-    deleteSelectedCss() {
+    deleteSelectedCss(e) {
+        e?.preventDefault();
         const selections = this.cssCodeEditor.editor.getSelections();
         selections.forEach(selection => this.parseRemove(selection));
         this.cssCodeEditor.editor.deleteH();
