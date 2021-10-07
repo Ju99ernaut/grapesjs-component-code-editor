@@ -15,8 +15,8 @@ export default (editor, opts) => {
         },
     });
 
-    cm.add(getObject, (editor, sender, options = {}) => {
-        return new CodeEditor(editor, { ...options, ...opts });
+    cm.add(getObject, () => {
+        return codeEditor;
     });
 
     cm.add(getConstuctor, () => {

@@ -68,7 +68,7 @@ body, html {
 * Plugin name: `grapesjs-component-code-editor`
 * Commands
     * `open-code` - opens code editor in right panel
-    * `code-editor-object` - get new instance `CodeEditor` object
+    * `code-editor-object` - get `CodeEditor` object
     * `code-editor-constructor` - get `CodeEditor` constructor
 
 
