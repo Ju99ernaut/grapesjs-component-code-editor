@@ -138,7 +138,20 @@ export class CodeEditor {
         let idStyles = '';
         this.cssCodeEditor
             .getContent()
-            .split(/(?<=}\n)/g)
+            .split('}\n')
+            .filter((el) => Boolean(el.trim()))
+            .map((cssObjectRule) => {
+                if (!(/}$/.test(cssObjectRule))) {
+                /* 
+                    Have to check closing bracket
+                    existence for every rule
+                    cause it can be missed
+                    after split and add it 
+                    if it doesnt match
+                */
+                    return `${cssObjectRule}}`;
+                }
+            })
             .forEach(rule => {
                 if (/^#/.test(rule))
                     idStyles += rule;
