@@ -19,8 +19,7 @@ export class CodeEditor {
     findPanel() {
         const pn = this.editor.Panels;
         const id = this.opts.panelId;
-        const panel = pn.getPanel(id) || pn.addPanel({ id });
-        return panel;
+        return pn.getPanel(id) || pn.addPanel({ id });
     }
 
     findWithinEditor(selector) {
@@ -98,6 +97,11 @@ export class CodeEditor {
         });
 
         editor.on('component:update', model => this.updateEditorContents());
+        editor.on('stop:preview', () => {
+            if (this.isShowing && !this.opts.preserveWidth) {
+                this.canvas.css('width', this.opts.openState.cv);
+            }
+        });
     }
 
     showCodePanel() {
@@ -142,13 +146,7 @@ export class CodeEditor {
             .filter((el) => Boolean(el.trim()))
             .map((cssObjectRule) => {
                 if (!(/}$/.test(cssObjectRule))) {
-                /* 
-                    Have to check closing bracket
-                    existence for every rule
-                    cause it can be missed
-                    after split and add it 
-                    if it doesnt match
-                */
+                    //* Have to check closing bracket existence for every rule cause it can be missed after split and add it if it doesnt match
                     return `${cssObjectRule}}`;
                 }
             })
@@ -170,9 +168,8 @@ export class CodeEditor {
         e?.preventDefault();
         const cssCode = this.cssCodeEditor.getContent().trim();
         if (!cssCode || cssCode === this.previousCssCode) return;
-        this.parseRemove(cssCode);
         this.previousCssCode = cssCode;
-        this.editor.addStyle(cssCode);
+        this.editor.Css.addRules(cssCode);
     }
 
     deleteSelectedCss(e) {
@@ -184,38 +181,25 @@ export class CodeEditor {
 
     parseRemove(removeCss) {
         const { editor } = this;
-        const cssc = editor.CssComposer
-        const allRules = cssc.getAll();
-        editor.Parser.parseCss(removeCss).forEach(p => {
-            const config = {
-                singleAtRule: p.singleAtRule,
-                atRuleType: p.atRuleType,
-                mediaText: p.mediaText,
-                state: p.state
-            };
-            p.selectors.length &&
-                p.selectors.forEach(selector => {
-                    this.removeSelector(selector, allRules, cssc, config);
-                });
-            p.selectorsAdd &&
-                p.selectorsAdd.split(', ').forEach(selector => {
-                    this.removeSelector(selector, allRules, cssc, config);
-                });
-        });
+        const css = editor.Css;
+        css.remove(this.getRules(editor.Parser.parseCss(removeCss)));
     }
 
-    removeSelector(rule, allRules, cssc, opts = {}) {
-        const { singleAtRule, atRuleType, mediaText, state } = opts;
-        const toRemove = allRules.filter(r => {
-            if (atRuleType && mediaText)
-                return r => r.get('atRuleType') == atRuleType && r.get('mediaText') == mediaText;
-            else if (atRuleType && singleAtRule)
-                return r => r.get('atRuleType') == atRuleType && r.get('singleAtRule') == singleAtRule;
-            else if (state)
-                return r == cssc.getRule(`${rule}:${state}`);
-            return r == cssc.getRule(rule);
+    getRules(rules, opts = {}) {
+        const { editor } = this;
+        const sm = editor.Selectors;
+        return rules.map((rule) => {
+            const selector = sm.get(rule.selectors);
+            const { state, selectorsAdd } = rule;
+            const { atRuleType, atRuleParams } = opts;
+            return (
+                selector &&
+                editor.Css.get(selector, state, atRuleParams, {
+                    selectorsAdd,
+                    atRule: atRuleType,
+                })
+            );
         });
-        allRules.remove(toRemove);
     }
 
     updateEditorContents() {
@@ -225,7 +209,7 @@ export class CodeEditor {
         if (this.component) {
             this.htmlCodeEditor.setContent(this.getComponentHtml(this.component));
             this.cssCodeEditor.setContent(this.editor.CodeManager.getCode(this.component, 'css', {
-                cssc: this.editor.CssComposer
+                cssc: this.editor.Css
             }));
         }
     }
