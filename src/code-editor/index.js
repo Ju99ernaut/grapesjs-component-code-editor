@@ -162,6 +162,7 @@ export class CodeEditor {
         } else {
             editor.select(component.replaceWith(htmlCode));
         }
+        return htmlCode;
     }
 
     updateCss(e) {
@@ -170,6 +171,7 @@ export class CodeEditor {
         if (!cssCode || cssCode === this.previousCssCode) return;
         this.previousCssCode = cssCode;
         this.editor.Css.addRules(cssCode);
+        return cssCode;
     }
 
     deleteSelectedCss(e) {
@@ -180,9 +182,7 @@ export class CodeEditor {
     }
 
     parseRemove(removeCss) {
-        const { editor } = this;
-        const css = editor.Css;
-        css.remove(this.getRules(editor.Parser.parseCss(removeCss)));
+        return this.editor.Css.remove(this.getRules(editor.Parser.parseCss(removeCss)));
     }
 
     getRules(rules, opts = {}) {
