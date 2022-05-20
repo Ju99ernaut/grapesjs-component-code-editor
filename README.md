@@ -79,7 +79,7 @@ body, html {
 | `panelId` | `views-container` | Id of panel to append code editor. |
 | `appendTo` | `.gjs-pn-views-container` | Append code editor to an element not `views-container` (class or id). |
 | `openState` | `{ pn: '35%', cv: '65%' }` | Determine width of views panel (`pn`) and canvas (`cv`) in the open state. |
-| `closedtate` | `{ pn: '15%', cv: '85%' }` | Determine width of views panel (`pn`) and canvas (`cv`) in the closed state. |
+| `closedState` | `{ pn: '15%', cv: '85%' }` | Determine width of views panel (`pn`) and canvas (`cv`) in the closed state. |
 | `codeViewOptions` | `{}` | Code view/editor options. ([more info](https://github.com/artf/grapesjs/issues/324)) |
 | `preserveWidth` | `false` | Stop resizing `openState` and `closedState`. Preserve views panel and canvas sizes. |
 | `clearData` | `false` | Remove all `gjs-data` attributes from the component. |
