@@ -20,7 +20,7 @@
     "code-editor"
   ],
   "devDependencies": {
-    "grapesjs-cli": "^1.0.12",
+    "grapesjs-cli": "^3.0.1",
     "node-sass": "^7.0.0"
   },
   "author": "Brendon Ngirazi",
