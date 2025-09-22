@@ -140,6 +140,7 @@ export class CodeEditor {
         this.previousHtmlCode = htmlCode;
 
         let idStyles = '';
+
         this.cssCodeEditor
             .getContent()
             .split('}\n')
@@ -147,11 +148,15 @@ export class CodeEditor {
             .map((cssObjectRule) => {
                 if (!(/}$/.test(cssObjectRule))) {
                     //* Have to check closing bracket existence for every rule cause it can be missed after split and add it if it doesnt match
+                    if (/@media[^{]*{[^}]*#/.test(cssObjectRule)) {
+                        // Media queries need double closing brackets
+                        return `${cssObjectRule}}}`;
+                    }
                     return `${cssObjectRule}}`;
                 }
             })
             .forEach(rule => {
-                if (/^#/.test(rule))
+                if (/^#|@media[^{]*{[^}]*#/.test(rule))
                     idStyles += rule;
             });
 
