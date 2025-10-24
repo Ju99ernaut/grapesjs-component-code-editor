@@ -1,6 +1,6 @@
 {
   "name": "grapesjs-component-code-editor",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "Grapesjs Component Code Editor",
   "main": "dist/index.js",
   "files": [
