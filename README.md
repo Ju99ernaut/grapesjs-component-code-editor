@@ -83,13 +83,10 @@ body, html {
 | `codeViewOptions` | `{}` | Code view/editor options. ([more info](https://github.com/artf/grapesjs/issues/324)) |
 | `preserveWidth` | `false` | Stop resizing `openState` and `closedState`. Preserve views panel and canvas sizes. |
 | `clearData` | `false` | Remove all `gjs-data` attributes from the component. |
-| `editJs` | `false` | Lets you edit component scripts `allowScripts` must be set to true. |
 | `cleanCssBtn` | `true` | Used to remove css from the Selector Manager. |
 | `htmlBtnText` | `Apply` | Save HTML button text. |
 | `cssBtnText` | `Apply` | Save CSS button text. |
 | `cleanCssBtnText` | `Delete` | Clean HTML button text. |
-
->Tip-[grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) is better suited for editing scripts instead of using `editJs`, reason being `editJs` will inject scripts as separate components onto the canvas which often interferes with the main editor. [grapesjs-script-editor](https://github.com/Ju99ernaut/grapesjs-script-editor) avoids this by injecting scripts directly into a component therefore avoiding the use of `allowScripts`.
 
 >`cleanCssBtn`-When you delete a selector in the `code-editor` it is still in the `Selector Manager` therefore it will still affect the component after saving, this button removes the selector from both the `code-editor` and `Selector Manager`. Only valid css rules can be removed eg `.class{ color: blue }`
 
@@ -180,25 +177,19 @@ $ cd grapesjs-component-code-editor
 Install dependencies
 
 ```sh
-$ npm i
-```
-
-Build css
-
-```sh
-$ npm run build:css
+$ pnpm i
 ```
 
 Start the dev server
 
 ```sh
-$ npm start
+$ pnpm start
 ```
 
 Build the source
 
 ```sh
-$ npm run build
+$ pnpm run build
 ```
 
 

@@ -1,25 +1,23 @@
-/* Class names prefixes */
-$prefix: 'gjs-' !default;
-
-.code-panel {
+export const openCodeStr = "open-code" as const;
+export const getObject = "code-editor-object" as const;
+export const getConstuctor = "code-editor-constructor" as const;
+export const getCodeEditorStyles = (stylePrefix: string) => {
+    return `.code-panel {
     text-align: left;
     font-size: 1rem;
     height: 100%;
     overflow: hidden;
 }
-
 .code-panel section {
     flex: 1;
     height: 50%;
 }
-
 .code-panel section .codepanel-separator {
     display: flex;
     justify-content: space-between;
     padding-left: 0.6rem;
     padding-right: 0.6rem;
 }
-
 .code-panel section .codepanel-label {
     margin-top: 5px;
     line-height: 20px;
@@ -28,22 +26,18 @@ $prefix: 'gjs-' !default;
     user-select: none;
     text-transform: uppercase;
 }
-
 .cp-btn-container {
     display: flex;
     justify-content: space-evenly;
-
-    & .#{$prefix}btn-prim {
-        margin: 2.5px;
-    }
 }
-
+.cp-btn-container .${stylePrefix}btn-prim {
+    margin: 2.5px;
+}
 .gutter {
     cursor: ns-resize;
     position: relative;
     background-color: rgba(0, 0, 0, 0.2);
 }
-
 .gutter:after {
     content: '';
     display: block;
@@ -53,29 +47,24 @@ $prefix: 'gjs-' !default;
     top: -3px;
     z-index: 150;
 }
-
 .code-panel .CodeMirror {
     height: 100%;
 }
-
 .cp-delete-css {
     margin-left: 70%;
 }
-
-.#{$prefix}pn-views {
+.${stylePrefix}pn-views {
     border-left: 1px solid rgba(0, 0, 0, 0.2);
     border-bottom: 0;
 }
-
-.#{$prefix}pn-views-container {
+.${stylePrefix}pn-views-container {
     box-shadow: initial;
     border-top: 2px solid rgba(0, 0, 0, 0.2);
     top: 40px;
     padding-top: 0;
     height: calc(100% - 40px);
 }
-
-.#{$prefix}pn-views-container,
-.#{$prefix}cv-canvas {
+.${stylePrefix}pn-views-container, .${stylePrefix}cv-canvas {
     transition: width 0.3s ease-in-out;
+} `
 }

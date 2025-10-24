@@ -6,8 +6,6 @@
   <title>Grapesjs Component Code Editor</title>
   <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
   <script src="https://unpkg.com/grapesjs"></script>
-  <link href="dist/grapesjs-component-code-editor.min.css" rel="stylesheet">
-  <script src="dist/grapesjs-component-code-editor.min.js"></script>
   <script src="https://unpkg.com/grapesjs-parser-postcss"></script>
   <style>
     body,
@@ -86,44 +84,46 @@
 
 
   <script type="text/javascript">
-    window.editor = grapesjs.init({
-      height: '100%',
-      container: '#gjs',
-      showOffsets: true,
-      fromElement: true,
-      noticeOnUnload: false,
-      storageManager: false,
-      selectorManager: {
-        componentFirst: true,
-      },
-      plugins: ['grapesjs-component-code-editor', 'grapesjs-parser-postcss'],
-      pluginsOpts: {
-        'grapesjs-component-code-editor': {
-          /* Test here your options  */
+    window.onload = () => {
+      window.editor = grapesjs.init({
+        height: '100%',
+        container: '#gjs',
+        showOffsets: true,
+        fromElement: true,
+        noticeOnUnload: false,
+        storageManager: false,
+        selectorManager: {
+          componentFirst: true,
+        },
+        plugins: ['grapesjs-component-code-editor', 'grapesjs-parser-postcss'],
+        pluginsOpts: {
+          'grapesjs-component-code-editor': {
+            /* Test here your options  */
+          }
         }
-      }
-    });
+      });
 
-    const pn = editor.Panels;
-    const panelViews = pn.addPanel({
-      id: 'views'
-    });
-    panelViews.get('buttons').add([{
-      attributes: {
-        title: 'Open Code'
-      },
-      className: 'fa fa-file-code-o',
-      command: 'open-code',
-      togglable: false, //do not close when button is clicked again
-      id: 'open-code'
-    }]);
-    editor.BlockManager.add('testBlock', {
-      label: 'Block',
-      attributes: {
-        class: 'gjs-fonts gjs-f-b1'
-      },
-      content: `<div style="padding-top:50px; padding-bottom:50px; text-align:center">Test block</div>`
-    });
+      const pn = editor.Panels;
+      const panelViews = pn.addPanel({
+        id: 'views'
+      });
+      panelViews.get('buttons').add([{
+        attributes: {
+          title: 'Open Code'
+        },
+        className: 'fa fa-file-code-o',
+        command: 'open-code',
+        togglable: false, //do not close when button is clicked again
+        id: 'open-code'
+      }]);
+      editor.BlockManager.add('testBlock', {
+        label: 'Block',
+        attributes: {
+          class: 'gjs-fonts gjs-f-b1'
+        },
+        content: `<div style="padding-top:50px; padding-bottom:50px; text-align:center">Test block</div>`
+      });
+    }
   </script>
 </body>
 
